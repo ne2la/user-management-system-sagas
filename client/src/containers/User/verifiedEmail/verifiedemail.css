@@ -1,0 +1,14 @@
+.verEmailImage{
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 500px;
+    justify-content: center;
+    align-items: center;
+}
+
+.containerVerEmail{
+    display:flex;
+    margin-top: 50px;
+    justify-content: center;
+}

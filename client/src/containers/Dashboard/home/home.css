@@ -1,0 +1,15 @@
+.header{
+    display: flex;
+    align-items:center;
+    justify-content: space-around;
+    margin: 20px;
+}
+
+.sec2{
+    margin: 70px
+}
+
+.sec1{
+    height:100vh;
+    background-color: #fbfcfc;
+}
