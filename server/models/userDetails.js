@@ -5,10 +5,10 @@ const userDetailsSchema = mongoose.Schema({
     userEmail: String,
     occupation: String,
     NIC: String,
-    gender: String,
-    address: String,
-    dateOfBirth: Date,
-    mobileNumber: String,
+    // gender: String,
+    // address: String,
+    // dateOfBirth: Date,
+    // mobileNumber: String,
     userImage: String
 });
 

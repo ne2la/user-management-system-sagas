@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from 'react'
 import { Button, Image, Typography } from 'antd'
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useLocation,useParams } from 'react-router-dom'
 import NotFoundPage from '../notFound/NotFoundPage'
@@ -14,10 +14,6 @@ const VerifiedEmail = () => {
     const param = useParams(); 
     const[validURL,setValidURL] = useState(false);
     
-    // useEffect(() => {
-    //   dispatch(confirmEmail(token))    
-    // }, [])
-
     useEffect(() => {
       
       const verifyEmailURL = async () => {

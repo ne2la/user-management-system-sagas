@@ -37,9 +37,9 @@ export const userDetailSchema = Joi.object({
     userEmail: email,
     occupation: nameJoi,
     NIC: Joi.string().alphanum().length(12).required(),
-    gender: Joi.string().lowercase().valid("male","female").required(),
-    address: Joi.string().required(),
-    dateOfBirth: Joi.string().required(),
-    mobileNumber: Joi.string().length(10).pattern(/^[0-9]+$/).required(),
+    // gender: Joi.string().lowercase().valid("male","female").required(),
+    // address: Joi.string().required(),
+    // dateOfBirth: Joi.string().required(),
+    // mobileNumber: Joi.string().length(10).pattern(/^[0-9]+$/).required(),
     userImage: Joi.string()
 })

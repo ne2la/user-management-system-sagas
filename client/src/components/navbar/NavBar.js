@@ -1,23 +1,36 @@
-import React, { useState } from 'react'
-import "./navbar.css"
+import React, { useEffect, useState } from 'react'
 import {Typography,Avatar,Button,Input} from 'antd'
 import SearchOutlined from '@ant-design/icons/SearchOutlined';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-
-
+import decode from "jwt-decode";
+import "./navbar.css";
 
 const NavBar = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  
   const [user,setUser] = useState(JSON.parse(localStorage.getItem("profile"))); 
+
+  useEffect(() => {
+    const token = user?.token;
+
+    // if the token expires
+    if(token){
+      
+      const decodedToken = decode(token);
+      
+      if(decodedToken.exp * 1000 < new Date().getTime()) logout();
+
+    }
+
+    setUser(JSON.parse(localStorage.getItem("profile")));
+
+  }, [location])
 
   const logout = () => {
 
     navigate("/signin");
-    // setUser(null);
     localStorage.clear();
     window.location.reload();
 
@@ -34,7 +47,7 @@ const NavBar = () => {
 
             <div className='section2'>
                 <Avatar size={40} src="https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/man5-512.png" />
-                <Typography style={{fontWeight:"bold",fontSize:"20px",fontFamily:"serif",color:"#808080"}}> {user?.data?.result?.name}</Typography>
+                <Typography style={{fontWeight:"bold",fontSize:"20px",fontFamily:"serif",color:"#808080"}}> {user.result.name}</Typography>
                 <Button type="primary" ghost onClick={logout}>  Log Out </Button>
               
 

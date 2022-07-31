@@ -1,7 +1,6 @@
-import React from 'react'
-import "./NotFoundPage.css"
-import {Link} from "react-router-dom"
+import React from 'react';
 import { Button } from "antd";
+import "./NotFoundPage.css";
 
 const NotFoundPage = () => {
   return (

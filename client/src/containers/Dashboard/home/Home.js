@@ -1,31 +1,36 @@
-import React,{useEffect, useState} from 'react'
-import {DatePicker,Button,Avatar,Typography,Modal} from "antd";
-import 'antd/dist/antd.css';
-import "./home.css"
+import React,{useState} from 'react'
+import {Button,Typography,Modal,Form} from "antd";
 import PlusOutlined from "@ant-design/icons/PlusOutlined"
-import Posts from '../posts/Posts';
-import FormAddUser from '../form/FormAddUser';
-import NavBar from '../../../components/navbar/NavBar';
-import {doGetUsers,doGetUsersFailed} from "../actions/getUsersAction"
+import {doGetUsers} from "../actions/userAction"
 import { createStructuredSelector } from "reselect";
 import { connect } from "react-redux";
 import {
     getUsers_inProgress,
     getUsers_allUsers,
-    getUsers_error
-} from "../selectors/getUsersSelector";
+    getUsers_error,
+    deleteUser_result,
+    deleteUser_error,
+} from "../selectors/userSelector";
+import Posts from './posts/Posts';
+import FormAddUser from './form/FormAddUser';
+import NavBar from '../../../components/navbar/NavBar';
+import "./home.css"
 
-const { Title, Paragraph, Text, Link } = Typography;
+const { Title } = Typography;
 
-const Home = (props) => {
+const Home = () => {
 
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [postData,setPostData] = useState({
+    userName:'',userEmail:'',occupation:'',NIC:''
+    ,userImage:''
+  })
+
+  const [form] = Form.useForm();
   
   const showModal = () => {
-    // doGetUsers();
     setVisible(true);
-    
   };
 
   const handleOk = () => {
@@ -37,50 +42,41 @@ const Home = (props) => {
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
+    form.resetFields();
     setVisible(false);
   };
 
-  // props.doGetUsers();
-
-  useEffect(() => {
-
-    props.doGetUsers();
-    
-
-  }, []) // Call dogetUsers => Delete,add,update
-
-  const allUsers = props.getUsers_allUsers && props.getUsers_allUsers;
-  // console.log("!!!!",allUsers)
-  
   return (
     <>
     <NavBar/>
+
     <section className='sec1'>
+      <div className='header'>
+        
+        <Typography>
+          <Title strong={true} level={2} style={{color:'#3498db'}}> User Management </Title>
+        </Typography>
 
-    <div className='header'>
-      
-      <Typography>
-        <Title strong={true} level={2} style={{color:'#3498db'}}> User Management </Title>
-      </Typography>
+        <Button onClick={showModal} type="primary" ghost shape="round" icon={<PlusOutlined />}> Add User </Button>
 
-      <Button onClick={showModal} type="primary" ghost shape="round" icon={<PlusOutlined />}> Add User </Button>
+        <Modal
+          title="Add a new User"
+          visible={visible}
+          onOk={handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          <FormAddUser postData={postData} setPostData={setPostData} setVisible={setVisible} form={form}/>
+        </Modal>
 
-      <Modal
-        title="Add a new User"
-        visible={visible}
-        onOk={handleOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
-      >
-        <FormAddUser/>
-      </Modal>
+      </div>
 
-    </div>
+      <div className='sec2'>
 
-    <div className='sec2'>
-      <Posts allUsers={allUsers}/>
-    </div>
+        <Posts postData={postData} setPostData={setPostData} setVisible={setVisible}/>
+        
+      </div>
 
     </section>
     </>
@@ -92,6 +88,8 @@ const mapStateToProps = createStructuredSelector({
   getUsers_inProgress: getUsers_inProgress(),
   getUsers_error: getUsers_error(),
   getUsers_allUsers: getUsers_allUsers(),
+  deleteUser_result: deleteUser_result(),
+  deleteUser_error: deleteUser_error()
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -99,10 +97,6 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(doGetUsers());
 },
 
-  // doForgotPasswordFailed: (payload) => {
-  //     dispatch(doForgotPasswordFailed(payload));
-  // },
-
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps,mapDispatchToProps)(Home);

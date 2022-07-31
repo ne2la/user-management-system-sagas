@@ -10,8 +10,6 @@ const initialState = {
     error: null
 };
 
-console.log(initialState)
-
 export default function resetPasswordReducer(state=initialState,action = {}){
 
     switch (action.type) {

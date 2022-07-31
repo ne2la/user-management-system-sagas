@@ -19,15 +19,15 @@ const sendEmail = async (req,res,email,subject,text,link) => {
             text: text
         };
 
-        // await transporter.sendMail(options,(err,info) => {
-        //     if(err){
-        //         return res.status(422).json({ err });
-        //     }
+        await transporter.sendMail(options,(err,info) => {
+            if(err){
+                return res.status(422).json({ err });
+            }
 
-        //     res.status(200).json({ message: `Check Your email. We've sent required details to ${email}` });
-        // })
+            res.status(200).json({ message: `Check Your email. We've sent required details to ${email}` });
+        })
 
-        res.status(200).json({ message: `Check Your email. We've sent required details to ${email}` });
+        // res.status(200).json({ message: `Check Your email. We've sent required details to ${email}` });
 
     } catch (error) {
         res.status(422).json({ error });

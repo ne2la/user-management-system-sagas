@@ -1,4 +1,4 @@
-import {Route,BrowserRouter as Router,Routes, Navigate, useLocation} from "react-router-dom";
+import {Route,BrowserRouter as Router,Routes} from "react-router-dom";
 import ProtectedRoutes from "./components/protectedRoutes/ProtectedRoutes"
 import Home from "./containers/Dashboard/home/Home"
 import ForgotPassword from "./containers/User/forgotPassword/ForgotPassword";
@@ -24,8 +24,6 @@ function App() {
           <Route path='/forgotPassword' exact element={<ForgotPassword/>}/>
           <Route path='/resetPassword/:id/:token' exact element={<ResetPassword/>}/>
 
-          
-  
         </Routes>
 
       </Router>  

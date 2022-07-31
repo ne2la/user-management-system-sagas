@@ -1,20 +1,12 @@
 import axios from "axios";
 
-// const API = axios.create({ baseURL:"http://localhost:5000/" });
-
-// API.interceptors.request.use((req) => {
-//   if(localStorage.getItem("profile")){
-//       req.headers.authorization = `Bearer ${JSON.parse(localStorage.getItem("profile")).token}`;
-//   }
-
-//   return req;
-// })
-
-  const config = {
-    headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem("profile")) && JSON.parse(localStorage.getItem("profile")).token}` }
-  };
-
-
+ axios.interceptors.request.use((req) => {
+  if(localStorage.getItem("profile")){
+    req.headers.authorization = `Bearer ${JSON.parse(localStorage.getItem("profile")).token}`;
+  }
+    
+    return req;
+ }) 
 
 const apiHandler = {
 
@@ -55,13 +47,19 @@ const apiHandler = {
   deleteUser: (data) => {
     const {payload} = data
     console.log(payload)
-    return axios.delete(`http://localhost:5000/posts/deletePost/${payload.id}`,config);
+    return axios.delete(`http://localhost:5000/posts/deletePost/${payload.id}`);
   },
 
   addUser: (data) => {
     const {payload} = data
     console.log(payload)
-    return axios.post(`http://localhost:5000/posts/createPost`,{...payload},config);
+    return axios.post(`http://localhost:5000/posts/createPost`,{...payload});
+  },
+
+  updateUser: (data) => {
+    const {payload} = data
+    console.log("apiUpdate",payload)
+    return axios.put(`http://localhost:5000/posts/updatePost/${payload._id}`,{...payload});
   },
 
 };

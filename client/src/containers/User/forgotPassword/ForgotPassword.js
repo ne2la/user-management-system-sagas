@@ -1,89 +1,48 @@
-import { Button, Input, Typography,Modal } from 'antd'
-import React, { useState,useEffect } from 'react'
-import {Form} from "antd"
-import { UserOutlined } from '@ant-design/icons';
-import { doForgotPassword ,doForgotPasswordFailed } from "../actions/forgotPasswordAction";
+import React, { useState } from 'react';
+import { Button, Input, Alert, Image,Form,Spin } from 'antd';
 import { createStructuredSelector } from "reselect";
-import { Spin } from "antd";
 import { connect } from "react-redux";
+import { UserOutlined } from '@ant-design/icons';
+import { Link } from "react-router-dom";
+import { doForgotPassword ,doForgotPasswordFailed } from "../actions/forgotPasswordAction";
 import {
     forgotPassword_error,
     forgotPassword_result,
     forgotPassword_inProgress
 } from "../selectors/forgotPasswordSelector";
-import ModalComponent from '../../../components/modal/ModalComponent';
-import { Link } from "react-router-dom";
+import "../signIn/signIn.css"
 
 const ForgotPassword = (props) => {
 
     const[forgotPasswordData,setForgotPasswordData] = useState({email:''});
     const [form] = Form.useForm();
 
-    // const errorModal = (error) => {
-    //     Modal.error({
-    //       title: 'Error',
-    //       content: (
-    //         <div> 
-    //           <p>{error}</p>
-    //         </div>
-    //       ),
-    
-    //       onOk() {},
-    //     });
-    //   };
-
-    // const infoModal = (data) => {
-    //     Modal.info({
-    //         title: 'Notification',
-    //         content: (
-    //         <div>
-    //             <p>{data}</p>
-    //         </div>
-    //         ),
-
-    //         onOk() {},
-    //     });
-    // };  
-
     const handleSubmit = async () => {
         props.doForgotPassword(forgotPasswordData);
     }
 
-    // useEffect(() => {
-
-    //     {props.forgotPassword_result && (
-    //       infoModal(props.forgotPassword_result)
-    //     )}
-  
-    // }, [props.forgotPassword_result])
-
-    // useEffect(() => {
-
-    //     {props.forgotPassword_error && props.forgotPassword_error.message && (
-    //       errorModal(props.forgotPassword_error.message)
-    //     )}
-  
-    // }, [props.forgotPassword_error])
-
-    //new
-
-    // useEffect(() => {
-    //   props.doForgotPasswordFailed(null);
-    // }, []);
-
-
   return (
     <>
-    <Typography style={{fontSize:"20px",fontWeight:"bold", marginTop:"20px", textAlign:"center"}}> Enter Your Email </Typography>
-    <div style={{display:"flex",justifyContent:"center",marginTop:"0px"}}>
+    
+    <div style={{display:"flex",justifyContent:"center",marginTop:"0px",flexDirection:"column",alignItems:"center",marginTop:"30px"}}>
+        
+        <Image
+            width="400px"
+            height="410px"
+            preview = {false} 
+            className='formImg'
+            src='https://img.freepik.com/free-vector/forgot-password-concept-illustration_114360-1095.jpg?t=st=1658843356~exp=1658843956~hmac=6ad85232fb1371f362c1afde0705542edb5fa2c38d01a0fe60fdf5e150b78e7f&w=740'
+        />
+
         <Form
-        form={form}
-        name="normal_login"
-        className="login-form"
-        initialValues={{
-            remember: true,
-        }}
-        onFinish={handleSubmit}
+            form={form}
+            name="normal_login"
+            className="login-form"
+            style={{paddingTop:"20px"}}
+            initialValues={{
+                remember: true,
+            }}
+            onFinish={handleSubmit}
         >
             <Form.Item
                 name="Email"
@@ -103,6 +62,7 @@ const ForgotPassword = (props) => {
             </Form.Item>
 
             <Form.Item>
+
                 <Button type="primary" htmlType="submit" className="login-form-button">
                     Get Reset Link
                 </Button>
@@ -120,11 +80,11 @@ const ForgotPassword = (props) => {
                 )}
 
                 {props.forgotPassword_result && (
-                    <ModalComponent type="info" data={props.forgotPassword_result}/>
+                    <Alert style={{marginTop:"20px",width:"350px"}} message={props.forgotPassword_result} type="success" showIcon/>
                 )}
 
                 {props.forgotPassword_error && props.forgotPassword_error.message && (
-                    <ModalComponent type="error" data={props.forgotPassword_error.message}/>
+                    <Alert style={{marginTop:"20px"}} message={props.forgotPassword_error.message} type="error" showIcon/>
                 )}
        
             </Form.Item>
@@ -142,6 +102,7 @@ const mapStateToProps = createStructuredSelector({
   });
   
 const mapDispatchToProps = (dispatch) => ({
+
     doForgotPassword: (payload) => {
         dispatch(doForgotPassword(payload));
     },
