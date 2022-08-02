@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
-import {Button,Typography,Modal,Form} from "antd";
+import {Button,Typography,Modal,Form, Alert, notification} from "antd";
 import PlusOutlined from "@ant-design/icons/PlusOutlined"
-import {doGetUsers} from "../actions/userAction"
+import {doGetUsers,doAddUser,doAddUserFailed,doUpdateUser} from "../actions/userAction"
 import { createStructuredSelector } from "reselect";
 import { connect } from "react-redux";
 import {
@@ -10,24 +10,21 @@ import {
     getUsers_error,
     deleteUser_result,
     deleteUser_error,
+    addUser_error,
+    addUser_inProgress,
+    addUser_result,
 } from "../selectors/userSelector";
 import Posts from './posts/Posts';
-import FormAddUser from './form/FormAddUser';
 import NavBar from '../../../components/navbar/NavBar';
+import FormUser from './form/FormUser';
 import "./home.css"
 
 const { Title } = Typography;
 
-const Home = () => {
+const Home = (props) => {
 
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [postData,setPostData] = useState({
-    userName:'',userEmail:'',occupation:'',NIC:''
-    ,userImage:''
-  })
-
-  const [form] = Form.useForm();
   
   const showModal = () => {
     setVisible(true);
@@ -42,9 +39,10 @@ const Home = () => {
   };
 
   const handleCancel = () => {
-    form.resetFields();
     setVisible(false);
   };
+
+  const [postData,setPostData] = useState(null)
 
   return (
     <>
@@ -67,7 +65,8 @@ const Home = () => {
           onCancel={handleCancel}
           footer={null}
         >
-          <FormAddUser postData={postData} setPostData={setPostData} setVisible={setVisible} form={form}/>
+          <FormUser postData={postData} setPostData={setPostData} setVisible={setVisible}/>
+  
         </Modal>
 
       </div>
@@ -75,7 +74,7 @@ const Home = () => {
       <div className='sec2'>
 
         <Posts postData={postData} setPostData={setPostData} setVisible={setVisible}/>
-        
+      
       </div>
 
     </section>
@@ -89,13 +88,28 @@ const mapStateToProps = createStructuredSelector({
   getUsers_error: getUsers_error(),
   getUsers_allUsers: getUsers_allUsers(),
   deleteUser_result: deleteUser_result(),
-  deleteUser_error: deleteUser_error()
+  deleteUser_error: deleteUser_error(),
+  addUser_inProgress: addUser_inProgress(),
+  addUser_error: addUser_error(),
+  addUser_result: addUser_result(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   doGetUsers: () => {
       dispatch(doGetUsers());
 },
+
+doAddUser: (payload,callback) => {
+  dispatch(doAddUser(payload,callback));
+},
+
+doAddUserFailed: (payload) => {
+  dispatch(doAddUserFailed(payload));
+},
+
+doUpdateUser: (payload,callback) => {
+  dispatch(doUpdateUser(payload,callback));
+}
 
 });
 

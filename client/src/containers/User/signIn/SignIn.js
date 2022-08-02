@@ -11,6 +11,7 @@ import {
   login_loggedUser,
 } from "../selectors/loginSelectors";
 import "./signIn.css"
+import SignInForm from './SignInForm';
 
 const SignIn = (props) => {
 
@@ -33,6 +34,13 @@ const SignIn = (props) => {
       form.resetFields();
       
     }
+
+    // Class Component => Doc
+
+    const onSubmit = values => {
+      props.doLogin(values, navigateHandler);
+      console.log(values)
+    }
   
     
   return (
@@ -43,7 +51,7 @@ const SignIn = (props) => {
         <Row>
           <Col span={12}>
 
-            <Form
+            {/* <Form
               form={form}
               name="normal_login"
               className="login-form"
@@ -121,7 +129,20 @@ const SignIn = (props) => {
                 )}
 
               </Form.Item>
-            </Form>
+            </Form> */}
+
+            <SignInForm onSubmit={onSubmit}/>
+
+            {props.login_inProgress && (
+                    <div style={{ margin: 10 }}>
+                      <Spin />
+                    </div>
+                )}
+
+                {props.login_error && props.login_error.message && (
+                  <Alert style={{margin:"10px 0px 0px 30px",width:"290px"}} message={props.login_error.message} type="error" showIcon/>
+                )}
+
           </Col>
 
           <Col span={12}> 

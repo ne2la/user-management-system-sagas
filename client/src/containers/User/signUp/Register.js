@@ -10,6 +10,7 @@ import {
   register_status,
 } from "../selectors/registerSelectors";
 import "./register.css"
+import RegisterForm from './RegisterForm';
 
 const Register = (props) => {
 
@@ -23,11 +24,16 @@ const Register = (props) => {
     console.log('Failed:', errorInfo);
   };
 
-  const handleSubmit = () => {
+  // const handleSubmit = () => {
 
-    props.doRegister(registerData);
-    form.resetFields();
+  //   props.doRegister(registerData);
+  //   form.resetFields();
     
+  // }
+
+  const onSubmit = values => {
+    props.doRegister(values);
+    console.log(values)
   }
 
   return (
@@ -47,7 +53,7 @@ const Register = (props) => {
         
 
           <Col span={12}>
-            <Form
+            {/* <Form
               name="register"
               form={form}
               className='regForm'
@@ -189,7 +195,24 @@ const Register = (props) => {
 
               </Form.Item>
 
-            </Form>
+            </Form> */}
+
+            <RegisterForm onSubmit={onSubmit}/>
+
+            {props.register_inProgress && (
+              <div style={{ margin: 10 }}>
+                <Spin />
+              </div>
+            )}
+
+            {props.register_error && props.register_error.message && (
+              <Alert style={{margin:"10px 0px 10px 30px",width:"290px"}} message={props.register_error.message} type="error" showIcon/>
+            )}
+
+            {props.register_status && (
+              <Alert style={{margin:"10px 0px 10px 30px",width:"290px"}} message={props.register_status} type="success" showIcon/>
+            )}
+
 
           </Col>
         </Row>
