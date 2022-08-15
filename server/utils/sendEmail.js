@@ -7,13 +7,13 @@ const sendEmail = async (req,res,email,subject,text,link) => {
         const transporter = nodeEmailer.createTransport({
             service: "hotmail",
             auth:{
-                user: "lakshitha-mern@outlook.com",
+                user: "serverless-mern@outlook.com",
                 pass: "Madushan@1234"
             } 
         });
 
         const options = {
-            from: "lakshitha-mern@outlook.com",
+            from: "serverless-mern@outlook.com",
             to: email,
             subject: subject,
             text: text
@@ -21,7 +21,7 @@ const sendEmail = async (req,res,email,subject,text,link) => {
 
         await transporter.sendMail(options,(err,info) => {
             if(err){
-                return res.status(422).json({ err });
+                return res.status(422).json({ message: err.response });
             }
 
             res.status(200).json({ message: `Check Your email. We've sent required details to ${email}` });
@@ -30,7 +30,7 @@ const sendEmail = async (req,res,email,subject,text,link) => {
         // res.status(200).json({ message: `Check Your email. We've sent required details to ${email}` });
 
     } catch (error) {
-        res.status(422).json({ error });
+        res.status(422).json({ message: error.message });
     }
 
 

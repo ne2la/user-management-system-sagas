@@ -46,7 +46,7 @@ const Post = (props) => {
       cancelText: 'No',
   
       onOk() {
-        props.doDeleteUser({ id: props.user._id },{getNotification,getNotificationFailed})
+        props.doDeleteUser({ id: props.user.id },{getNotification,getNotificationFailed})
   
       },
   
@@ -63,7 +63,15 @@ const Post = (props) => {
   const onClickUpdate = () => {
     
     setVisible(true)
-    setPostData(props.user)
+    setPostData(
+      {
+        userName: props.user.userName, 
+        userEmail: props.user.email,
+        NIC: props.user.NIC,
+        occupation: props.user.occupation,
+        userImage: props.user.userImage,
+        id: props.user.id
+      })
   }
 
   return (
@@ -79,7 +87,7 @@ const Post = (props) => {
         <Collapse style={{marginTop:"20px"}}>
           <Panel header="More Info...">
             <p> <b>NIC : </b> {props.user.NIC} </p>
-            <p> <b>Email : </b> {props.user.userEmail} </p>
+            <p> <b>Email : </b> {props.user.email} </p>
           </Panel>
         </Collapse>
 

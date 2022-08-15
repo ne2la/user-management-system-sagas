@@ -51,97 +51,17 @@ const SignIn = (props) => {
         <Row>
           <Col span={12}>
 
-            {/* <Form
-              form={form}
-              name="normal_login"
-              className="login-form"
-              initialValues={{
-                remember: true,
-              }}
-              onFinish={handleSubmit}
-            >
-
-              <Form.Item
-                name="Email"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your Email !',
-                  },
-                  {
-                    type: 'email',
-                    message: 'The input is not valid E-mail!',
-                  },
-                ]}
-                hasFeedback
-              >
-                <Input value={signInData.email} onChange={(e) => setSignInData({ ...signInData,email: e.target.value })} className='regFormInput' prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
-              </Form.Item>
-
-              <Form.Item
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your Password!',
-                  },
-                  {
-                    pattern: new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/),
-                    message: 'Password must contain at least 8 characters, at least 1 number and both lower and uppercase letters and special characters!',
-                  },
-                ]}
-                hasFeedback
-              >
-                <Input
-                  className='regFormInput'
-                  value={signInData.password}
-                  onChange={(e) => setSignInData({ ...signInData,password: e.target.value })}
-                  prefix={<LockOutlined className="site-form-item-icon" />}
-                  type="password"
-                  placeholder="Password"
-                />
-              </Form.Item>
-
-              <Form.Item>
-                <Form.Item name="remember" valuePropName="checked" noStyle>
-                  <Checkbox>Remember me</Checkbox>
-                </Form.Item>
-
-                <Link className="login-form-forgot" to={"/forgotPassword"}>
-                  Forgot password
-                </Link>
-              </Form.Item>
-
-              <Form.Item>
-                <Button type="primary" htmlType="submit" className="login-form-button">
-                  Log in
-                </Button>
-                <Typography style={{paddingTop:"8px",fontWeight:"bold"}}> Or <Link  to="/register" style={{color:"#139c43"}}>register now!</Link></Typography>
-                
-                {props.login_inProgress && (
-                    <div style={{ margin: 10 }}>
-                      <Spin />
-                    </div>
-                )}
-
-                {props.login_error && props.login_error.message && (
-                  <Alert style={{marginTop:"10px"}} message={props.login_error.message} type="error" showIcon/>
-                )}
-
-              </Form.Item>
-            </Form> */}
-
             <SignInForm onSubmit={onSubmit}/>
 
             {props.login_inProgress && (
-                    <div style={{ margin: 10 }}>
-                      <Spin />
-                    </div>
-                )}
+              <div style={{ margin: 10 }}>
+                <Spin />
+              </div>
+            )}
 
-                {props.login_error && props.login_error.message && (
-                  <Alert style={{margin:"10px 0px 0px 30px",width:"290px"}} message={props.login_error.message} type="error" showIcon/>
-                )}
+            {props.login_error && props.login_error.message && (
+              <Alert style={{margin:"10px 0px 0px 30px",width:"290px"}} message={props.login_error.message} type="error" showIcon/>
+            )}
 
           </Col>
 

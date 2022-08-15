@@ -88,9 +88,10 @@ const doAddUserFailed = (error) => ({
 
 //Update User
 
-const doUpdateUser = (payload,callback) => ({
+const doUpdateUser = (payload,id,callback) => ({
     type: DO_UPDATE_USER_REQUEST,
     payload,
+    id,
     callback
 });
 

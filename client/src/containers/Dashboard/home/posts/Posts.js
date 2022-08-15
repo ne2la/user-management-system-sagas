@@ -31,7 +31,7 @@ const Posts = (props) => {
 
       {allUsers && allUsers.map((user) => (
 
-        <Col span={6} key={user._id}> 
+        <Col span={6} key={user.id}> 
           <Post user={user} postData={props.postData} setPostData={props.setPostData} setVisible={props.setVisible}/>
         </Col>
 

@@ -1,25 +1,25 @@
 import axios from "axios";
 
- axios.interceptors.request.use((req) => {
-  if(localStorage.getItem("profile")){
-    req.headers.authorization = `Bearer ${JSON.parse(localStorage.getItem("profile")).token}`;
-  }
+//  axios.interceptors.request.use((req) => {
+//   if(localStorage.getItem("profile")){
+//     req.headers.authorization = `Bearer ${JSON.parse(localStorage.getItem("profile")).token}`;
+//   }
     
-    return req;
- }) 
+//     return req;
+//  }) 
 
 const apiHandler = {
 
   login: (data) => {
     const { payload } = data;
-    return axios.post("http://localhost:5000/user/signin", {
+    return axios.post("https://z5osptjne0.execute-api.us-east-1.amazonaws.com/dev/signin", {
       ...payload,
     });
   },
 
   register: (data) => {
     const { payload } = data;
-    return axios.post("http://localhost:5000/user/signup", {
+    return axios.post("https://z5osptjne0.execute-api.us-east-1.amazonaws.com/dev/register", {
       ...payload,
     });
   },
@@ -27,7 +27,7 @@ const apiHandler = {
   forgotPassword: (data) => {
     const { payload } = data;
     console.log(payload)
-    return axios.post("http://localhost:5000/user/forgotPassword", {
+    return axios.post("https://z5osptjne0.execute-api.us-east-1.amazonaws.com/dev/forgotPassword", {
       ...payload,
     });
   },
@@ -35,31 +35,31 @@ const apiHandler = {
   resetPassword: (data) => {
     const { payload } = data;
     console.log(payload)
-    return axios.put(`http://localhost:5000/user${payload.path}`, { 
+    return axios.put(`https://z5osptjne0.execute-api.us-east-1.amazonaws.com/dev${payload.path}`, { 
       ...payload,
     });
   },
 
   getUsers: () => {
-    return axios.get(`http://localhost:5000/posts/`);
+    return axios.get(`https://b48us7kmv5.execute-api.us-east-1.amazonaws.com/dev/userDetails`);
   },
 
   deleteUser: (data) => {
     const {payload} = data
     console.log(payload)
-    return axios.delete(`http://localhost:5000/posts/deletePost/${payload.id}`);
+    return axios.delete(`https://b48us7kmv5.execute-api.us-east-1.amazonaws.com/dev/deleteUser/${payload.id}`);
   },
 
   addUser: (data) => {
     const {payload} = data
     console.log(payload)
-    return axios.post(`http://localhost:5000/posts/createPost`,{...payload});
+    return axios.post(`https://b48us7kmv5.execute-api.us-east-1.amazonaws.com/dev/addUser`,{...payload});
   },
 
   updateUser: (data) => {
-    const {payload} = data
-    console.log("apiUpdate",payload)
-    return axios.put(`http://localhost:5000/posts/updatePost/${payload._id}`,{...payload});
+    const {payload,id} = data
+    console.log("apiUpdate",data)
+    return axios.put(`https://b48us7kmv5.execute-api.us-east-1.amazonaws.com/dev/updateUser/${id}`,{...payload});
   },
 
 };

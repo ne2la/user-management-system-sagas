@@ -1,0 +1,108 @@
+service: user-service
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+  environment:
+    USER_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "*"
+    
+  lambdaHashingVersion: 20201221
+
+functions:
+  registerUser:
+    handler: route.registerUser
+    description: Register a user
+    events:
+      - http:
+          path: /register
+          method: post
+
+  fetchUsers:
+      handler: route.fetchUsers
+      memorySize: 128
+      description: Fetch all Registered Users
+      events:
+        - http:
+            path: /users
+            method: get
+
+  signInUser:
+    handler: route.signInUser
+    description: SignIn user
+    events:
+      - http:
+          path: /signin
+          method: post
+
+  forgotPassword:
+    handler: route.forgotPassword
+    description: Forgot Password
+    events:
+      - http:
+          path: /forgotPassword
+          method: post
+
+  resetPassword:
+    handler: route.resetPassword
+    description: Reset Password
+    events:
+      - http:
+          path: /resetPassword/{id}/{token}
+          method: put
+
+  deleteUser:
+      handler: route.deleteUser
+      memorySize: 128
+      description: Delete a User
+      events:
+        - http:
+            path: /deleteUser/{id}
+            method: delete
+
+plugins:
+  - serverless-webpack
+
+resources:
+  Resources:
+    UsersDynamoDbTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+          - AttributeName: "email"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id"
+            KeyType: "HASH"
+        GlobalSecondaryIndexes:
+          - IndexName: "email_index"
+            KeySchema:
+              - AttributeName: "email"
+                KeyType: "HASH"
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 5
+              WriteCapacityUnits: 5
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: "NEW_AND_OLD_IMAGES"
+        TableName: ${self:provider.environment.USER_TABLE}

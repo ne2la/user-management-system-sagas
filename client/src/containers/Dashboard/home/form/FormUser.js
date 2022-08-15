@@ -30,10 +30,19 @@ const FormUser = (props) => {
         userImage:''
     }
 
+    // console.log(postData)
+
     const handleSubmit = (values) => {
 
-        if(values._id){
-          props.doUpdateUser(values,getNotificationUpdate)  
+        if(values.id){
+          props.doUpdateUser(
+            {
+              userName: values.userName, userEmail: values.userEmail,
+              NIC: values.NIC, occupation: values.occupation,
+              userImage: values.userImage
+            },
+            values.id,
+            getNotificationUpdate)  
         }else{
           props.doAddUser(values,getNotification);
         }
@@ -93,7 +102,7 @@ const FormUser = (props) => {
         <div className='formRows'>
 
         <div className='formCols'>
-            <label className='formLabels' htmlFor="firstName">First Name : </label>
+            <label className='formLabels' htmlFor="firstName"> Name : </label>
             <div className='colContainer'>
                 <input
                     id="userName"
@@ -211,8 +220,8 @@ const mapStateToProps = createStructuredSelector({
     dispatch(doAddUser(payload,callback));
   },
   
-  doUpdateUser: (payload,callback) => {
-    dispatch(doUpdateUser(payload,callback));
+  doUpdateUser: (payload,id,callback) => {
+    dispatch(doUpdateUser(payload,id,callback));
   }
   
   });

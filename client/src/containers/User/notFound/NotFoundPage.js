@@ -14,7 +14,7 @@ const NotFoundPage = () => {
                   <h1><span>4</span><span>0</span><span>4</span></h1>
               </div>
               <h2>we are sorry, but the posts you requested were not found</h2>
-              <a href='/' className="link">
+              <a href='/signin' className="link">
                 <Button type="primary" size='large'> Reload!! </Button>
               </a>
               

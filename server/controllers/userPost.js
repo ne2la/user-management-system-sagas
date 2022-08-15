@@ -25,9 +25,6 @@ const createPost =  async (req,res) => {
         const isExistingNIC = await UserDetails.findOne({ NIC: validData.NIC });
         if(isExistingNIC) return res.status(400).json({ message: "NIC already exists" });
 
-        // const isExistingMobile = await UserDetails.findOne({ mobileNumber: validData.mobileNumber });
-        // if(isExistingMobile) return res.status(400).json({ message: "Mobile Number already exists" });
-
         const newPost = new UserDetails(validData);
 
         await newPost.save();

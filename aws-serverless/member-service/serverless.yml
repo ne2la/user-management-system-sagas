@@ -1,0 +1,110 @@
+service: member-service
+# changed Service from candidate
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+  environment:
+    MEMBER_DETAILS_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "*"
+  lambdaHashingVersion: 20201221
+
+
+functions:
+  addUser:
+    handler: route.addUser
+    memorySize: 128
+    description: Add User information
+    events:
+      - http:
+          path: /addUser
+          method: post
+
+  fetchUsers:
+      handler: route.fetchUsers
+      memorySize: 128
+      description: Fetch all Users
+      events:
+        - http:
+            path: /userDetails
+            method: get
+
+  deleteUser:
+      handler: route.deleteUser
+      memorySize: 128
+      description: Delete a User
+      events:
+        - http:
+            path: /deleteUser/{id}
+            method: delete
+
+  updateUser:
+      handler: route.updateUser
+      memorySize: 128
+      description: Update a User
+      events:
+        - http:
+            path: /updateUser/{id}
+            method: put
+
+plugins:
+  - serverless-webpack
+
+resources:
+  Resources:
+    MembersDynamoDbTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+          - AttributeName: "email"
+            AttributeType: "S"
+          - AttributeName: "NIC"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id"
+            KeyType: "HASH"
+        GlobalSecondaryIndexes:
+          - IndexName: "email_index"
+            KeySchema:
+              - AttributeName: "email"
+                KeyType: "HASH"
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 5
+              WriteCapacityUnits: 5
+          - IndexName: "NIC_index"
+            KeySchema:
+              - AttributeName: "NIC"
+                KeyType: "HASH"
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 5
+              WriteCapacityUnits: 5
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: "NEW_AND_OLD_IMAGES"
+        TableName: ${self:provider.environment.MEMBER_DETAILS_TABLE}
+
+
+
+
+
