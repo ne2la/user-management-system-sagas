@@ -1,5 +1,5 @@
 service: member-service
-# changed Service from candidate
+
 frameworkVersion: '3'
 
 provider:
@@ -31,6 +31,7 @@ functions:
       - http:
           path: /addUser
           method: post
+          cors: true
 
   fetchUsers:
       handler: route.fetchUsers
@@ -40,6 +41,7 @@ functions:
         - http:
             path: /userDetails
             method: get
+            cors: true
 
   deleteUser:
       handler: route.deleteUser
@@ -49,6 +51,7 @@ functions:
         - http:
             path: /deleteUser/{id}
             method: delete
+            cors: true
 
   updateUser:
       handler: route.updateUser
@@ -58,6 +61,7 @@ functions:
         - http:
             path: /updateUser/{id}
             method: put
+            cors: true
 
 plugins:
   - serverless-webpack
@@ -98,10 +102,8 @@ resources:
               ReadCapacityUnits: 5
               WriteCapacityUnits: 5
         ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        StreamSpecification:
-          StreamViewType: "NEW_AND_OLD_IMAGES"
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
         TableName: ${self:provider.environment.MEMBER_DETAILS_TABLE}
 
 

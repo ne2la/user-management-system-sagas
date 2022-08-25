@@ -4,6 +4,7 @@ import registerSagas from "../containers/User/sagas/registerSagas";
 import loginSagas from "../containers/User/sagas/loginSagas";
 import forgotPasswordSagas from "../containers/User/sagas/forgotPasswordSagas";
 import resetPasswordSagas from "../containers/User/sagas/resetPasswordSagas";
+import verifyEmailSagas from "../containers/User/sagas/verifyEmailSagas";
 import userSagas from "../containers/Dashboard/sagas/userSagas";
 
 export default function* rootSaga() {
@@ -13,6 +14,7 @@ export default function* rootSaga() {
     fork(loginSagas), 
     fork(forgotPasswordSagas),
     fork(resetPasswordSagas),
+    fork(verifyEmailSagas),
     fork(userSagas)
     
   ]);

@@ -47,7 +47,7 @@ const NavBar = () => {
 
             <div className='section2'>
                 <Avatar size={40} src="https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/man5-512.png" />
-                <Typography style={{fontWeight:"bold",fontSize:"20px",fontFamily:"serif",color:"#808080"}}> {user.user.name}</Typography>
+                {/* <Typography style={{fontWeight:"bold",fontSize:"20px",fontFamily:"serif",color:"#808080"}}> {user.user.name}</Typography> */}
                 <Button type="primary" ghost onClick={logout}>  Log Out </Button>
               
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Input, Alert, Image,Form,Spin } from 'antd';
 import { createStructuredSelector } from "reselect";
 import { connect } from "react-redux";
-import { UserOutlined } from '@ant-design/icons';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
 import { doForgotPassword ,doForgotPasswordFailed } from "../actions/forgotPasswordAction";
 import {
@@ -10,16 +10,32 @@ import {
     forgotPassword_result,
     forgotPassword_inProgress
 } from "../selectors/forgotPasswordSelector";
+
+import { doResetPassword  } from "../actions/resetPasswordAction";
+import {
+    resetPassword_error,
+    resetPassword_result,
+    resetPassword_inProgress
+} from "../selectors/resetPasswordSelector";
+
 import "../signIn/signIn.css"
 
 const ForgotPassword = (props) => {
 
     const[forgotPasswordData,setForgotPasswordData] = useState({email:''});
+    const[resetPasswordData,setResetPasswordData] = useState({newPassword:'',verificationCode:''});
     const [form] = Form.useForm();
 
     const handleSubmit = async () => {
         props.doForgotPassword(forgotPasswordData);
     }
+
+    const onClickReset = () => {
+        props.doResetPassword({resetPasswordData,email:forgotPasswordData.email})
+        
+    }
+
+    console.log({resetPasswordData,email:forgotPasswordData.email})
 
   return (
     <>
@@ -64,14 +80,14 @@ const ForgotPassword = (props) => {
             <Form.Item>
 
                 <Button type="primary" htmlType="submit" className="login-form-button">
-                    Get Reset Link
+                    Get Reset Code
                 </Button>
 
-                <Link to={"/signin"}>
+                {/* <Link to={"/signin"}>
                     <Button style={{marginTop:"10px"}} type="primary" htmlType="submit" className="login-form-button">
                         Sign In
                     </Button>
-                </Link>
+                </Link> */}
 
                 {props.forgotPassword_inProgress && (
                     <div style={{ margin: 10 }}>
@@ -80,7 +96,84 @@ const ForgotPassword = (props) => {
                 )}
 
                 {props.forgotPassword_result && (
-                    <Alert style={{marginTop:"20px",width:"350px"}} message={props.forgotPassword_result} type="success" showIcon/>
+                    <>
+                    <Alert style={{marginTop:"20px",width:"350px",marginBottom:"10px"}} message={props.forgotPassword_result} type="success" showIcon/>
+                    <Form.Item
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your Password!',
+            },
+            {
+              pattern: new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/),
+              message: 'Password must contain at least 8 characters, at least 1 number and both lower and uppercase letters and special characters!',
+            },
+          ]}
+          hasFeedback
+        >
+
+          <Input
+            className='regFormInput'
+            value={resetPasswordData.newPassword}
+            onChange={(e) => setResetPasswordData({ ...resetPasswordData,newPassword: e.target.value })}
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="Password"
+          />
+
+        </Form.Item>
+
+        <Form.Item
+          name="verificationCode"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your Verification Code!',
+            },
+          ]}
+          hasFeedback
+        >
+
+          <Input
+            className='regFormInput'
+            value={resetPasswordData.verificationCode}
+            onChange={(e) => setResetPasswordData({ ...resetPasswordData,verificationCode: e.target.value })}
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="text"
+            placeholder="Verification Code"
+          />
+
+            <Button onClick={onClickReset} type="primary" className="login-form-button" style={{marginTop:"20px"}}>
+                Reset Password
+            </Button>
+
+            <Link to={"/signin"}>
+                    <Button style={{marginTop:"10px"}} type="primary" className="login-form-button">
+                        Sign In
+                    </Button>
+                </Link>
+
+            {props.resetPassword_inProgress && (
+                <div style={{ margin: 10 }}>
+                  <Spin />
+                </div>
+            )}
+
+            {props.resetPassword_result && (
+              <Alert style={{marginTop:"10px"}} message={props.resetPassword_result} type="success" showIcon/>
+            )}
+
+            {props.resetPassword_error && props.resetPassword_error.message && (
+              <Alert style={{marginTop:"10px"}} message={props.resetPassword_error.message} type="error" showIcon/>
+            )}
+
+            
+
+
+        </Form.Item>
+
+                </>
                 )}
 
                 {props.forgotPassword_error && props.forgotPassword_error.message && (
@@ -99,6 +192,11 @@ const mapStateToProps = createStructuredSelector({
     forgotPassword_inProgress: forgotPassword_inProgress(),
     forgotPassword_error: forgotPassword_error(),
     forgotPassword_result: forgotPassword_result(),
+
+    resetPassword_inProgress: resetPassword_inProgress(),
+    resetPassword_error: resetPassword_error(),
+    resetPassword_result: resetPassword_result(),
+
   });
   
 const mapDispatchToProps = (dispatch) => ({
@@ -109,6 +207,10 @@ const mapDispatchToProps = (dispatch) => ({
 
     doForgotPasswordFailed: (payload) => {
         dispatch(doForgotPasswordFailed(payload));
+    },
+
+    doResetPassword: (payload) => {
+        dispatch(doResetPassword(payload));
     },
 
 });

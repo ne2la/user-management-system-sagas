@@ -11,6 +11,12 @@ import {
 } from "../selectors/registerSelectors";
 import "./register.css"
 import RegisterForm from './RegisterForm';
+import VerifyEmail from './VerifyEmail';
+import {
+  verifyEmail_error,
+  verifyEmail_inProgress,
+  verifyEmail_result,
+} from "../selectors/verifyEmailSelector";
 
 const Register = (props) => {
 
@@ -31,10 +37,14 @@ const Register = (props) => {
     
   // }
 
+  const [verifyEmail,setVerifyEmail] = useState(null);
+
   const onSubmit = values => {
     props.doRegister(values);
     console.log(values)
   }
+
+  console.log(verifyEmail)
 
   return (
     <section className='authSec1'>
@@ -54,7 +64,7 @@ const Register = (props) => {
 
           <Col span={12}>
             
-            <RegisterForm onSubmit={onSubmit}/>
+            <RegisterForm onSubmit={onSubmit} setVerifyEmail={setVerifyEmail}/>
 
             {props.register_inProgress && (
               <div style={{ margin: 10 }}>
@@ -63,13 +73,39 @@ const Register = (props) => {
             )}
 
             {props.register_error && props.register_error.message && (
+              <>
               <Alert style={{margin:"10px 0px 10px 30px",width:"290px"}} message={props.register_error.message} type="error" showIcon/>
+              </>
             )}
 
             {props.register_status && (
-              <Alert style={{margin:"10px 0px 10px 30px",width:"290px"}} message={props.register_status} type="success" showIcon/>
+              <>
+                <Alert style={{margin:"10px 0px 10px 30px",width:"290px"}} message={props.register_status} type="success" showIcon/>
+                <VerifyEmail verifyEmail={verifyEmail}/>                
+              </>
             )}
 
+            <hr/>
+
+            {/* <VerifyEmail verifyEmail={verifyEmail}/> */}
+
+            {props.verifyEmail_inProgress && (
+              <div style={{ margin: 10 }}>
+                <Spin />
+              </div>
+            )}
+
+            {props.verifyEmail_result && (
+              <>
+                <Alert style={{margin:"10px 0px 10px 30px",width:"290px"}} message={props.verifyEmail_result} type="success" showIcon/>
+              </>
+            )}
+
+            {props.verifyEmail_error && props.verifyEmail_error.message && (
+              <>
+              <Alert style={{margin:"10px 0px 10px 30px",width:"290px"}} message={props.verifyEmail_error.message} type="error" showIcon/>
+              </>
+            )}
 
           </Col>
         </Row>
@@ -82,6 +118,10 @@ const mapStateToProps = createStructuredSelector({
   register_inProgress: register_inProgress(),
   register_status: register_status(),
   register_error: register_error(),
+
+  verifyEmail_inProgress: verifyEmail_inProgress(),
+  verifyEmail_result: verifyEmail_result(),
+  verifyEmail_error: verifyEmail_error(),
 });
 
 const mapDispatchToProps = (dispatch) => ({

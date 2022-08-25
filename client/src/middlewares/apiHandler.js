@@ -12,14 +12,21 @@ const apiHandler = {
 
   login: (data) => {
     const { payload } = data;
-    return axios.post("https://z5osptjne0.execute-api.us-east-1.amazonaws.com/dev/signin", {
+    return axios.post("https://z5osptjne0.execute-api.us-east-1.amazonaws.com/dev/signInUserCognito", {
       ...payload,
     });
   },
 
   register: (data) => {
     const { payload } = data;
-    return axios.post("https://z5osptjne0.execute-api.us-east-1.amazonaws.com/dev/register", {
+    return axios.post("https://z5osptjne0.execute-api.us-east-1.amazonaws.com/dev/registerUserCognito", {
+      ...payload,
+    });
+  },
+
+  verifyEmail: (data) => {
+    const { payload } = data;
+    return axios.post("https://z5osptjne0.execute-api.us-east-1.amazonaws.com/dev/confirmRegisterUserCognito", {
       ...payload,
     });
   },
@@ -27,7 +34,7 @@ const apiHandler = {
   forgotPassword: (data) => {
     const { payload } = data;
     console.log(payload)
-    return axios.post("https://z5osptjne0.execute-api.us-east-1.amazonaws.com/dev/forgotPassword", {
+    return axios.post("https://z5osptjne0.execute-api.us-east-1.amazonaws.com/dev/forgotPasswordCognito", {
       ...payload,
     });
   },
@@ -35,7 +42,7 @@ const apiHandler = {
   resetPassword: (data) => {
     const { payload } = data;
     console.log(payload)
-    return axios.put(`https://z5osptjne0.execute-api.us-east-1.amazonaws.com/dev${payload.path}`, { 
+    return axios.put(`https://z5osptjne0.execute-api.us-east-1.amazonaws.com/dev/resetPasswordCognito`, { 
       ...payload,
     });
   },

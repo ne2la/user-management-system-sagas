@@ -5,35 +5,35 @@ import { UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { Typography } from 'antd';
 
-const RegisterForm = ({onSubmit}) => (
+const RegisterForm = ({onSubmit,setVerifyEmail}) => (
   <div>
     
     <Formik
       initialValues={{ 
-        firstName:'',lastName:'',email: '', password: '',confirmPassword:'' 
+        email: '', password: '',confirmPassword:'' 
     }}
       validate={values => {
         const errors = {};
 
-        // First Name Validate
+        // // First Name Validate
 
-        if (!values.firstName) {
-            errors.firstName = 'Required';
-        } else if (
-            !/^[a-zA-Z]+$/.test(values.firstName)
-        ) {
-            errors.firstName = 'Please input Valid Name!';
-        }
+        // if (!values.firstName) {
+        //     errors.firstName = 'Required';
+        // } else if (
+        //     !/^[a-zA-Z]+$/.test(values.firstName)
+        // ) {
+        //     errors.firstName = 'Please input Valid Name!';
+        // }
 
-        // Last Name Validate
+        // // Last Name Validate
 
-        if (!values.lastName) {
-            errors.lastName = 'Required';
-        } else if (
-            !/^[a-zA-Z]+$/.test(values.lastName)
-        ) {
-            errors.lastName = 'Please input Valid Name!';
-        }
+        // if (!values.lastName) {
+        //     errors.lastName = 'Required';
+        // } else if (
+        //     !/^[a-zA-Z]+$/.test(values.lastName)
+        // ) {
+        //     errors.lastName = 'Please input Valid Name!';
+        // }
         
         // Email Validate
 
@@ -76,7 +76,9 @@ const RegisterForm = ({onSubmit}) => (
         //   setSubmitting(false);
         // }, 400);
         onSubmit(values);
+        setVerifyEmail(values.email)
         setSubmitting(false)
+        
 
       }}
     >
@@ -86,14 +88,14 @@ const RegisterForm = ({onSubmit}) => (
       }) => (
         <Form className='regForm'>
 
-            <label htmlFor="firstName" className="regFormItem">First Name</label> <br/>
+            {/* <label htmlFor="firstName" className="regFormItem">First Name</label> <br/>
             <Field id="firstName" type="text" name="firstName" className='regFormInput'/>
             <ErrorMessage name="firstName" component="div" style={{fontWeight:"bold",fontSize:"13px",paddingLeft:"10px",color:"#DC143C"}}/>
 
             <br/>
             <label htmlFor="lastName" className="regFormItem">Last Name</label> <br/>
             <Field id="lastName" type="text" name="lastName" className='regFormInput' />
-            <ErrorMessage name="lastName" component="div" style={{fontWeight:"bold",fontSize:"13px",paddingLeft:"10px",color:"#DC143C"}}/>
+            <ErrorMessage name="lastName" component="div" style={{fontWeight:"bold",fontSize:"13px",paddingLeft:"10px",color:"#DC143C"}}/> */}
 
             <br/>        
             <label htmlFor="email" className="regFormItem">Email</label> <br/>

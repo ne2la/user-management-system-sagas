@@ -17,3 +17,20 @@ export const resetPassword = async (event) =>
 
 export const deleteUser = async (event) =>
   await userHandler.deleteUser(event);
+
+// --------------------------------------------  
+
+export const registerUserCognito = async (event) =>
+  await userHandler.registerUserCognito(event);
+
+export const confirmRegisterUserCognito = async (event) =>
+  await userHandler.confirmRegisterUserCognito(event);
+
+export const signInUserCognito = async (event) => 
+  await userHandler.signInUserCognito(event);
+
+export const forgotPasswordCognito = async (event) => 
+  await userHandler.forgotPasswordCognito(event);
+
+export const resetPasswordCognito = async (event) =>
+  await userHandler.resetPasswordCognito(event);

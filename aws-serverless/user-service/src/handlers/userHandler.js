@@ -8,8 +8,10 @@ import { v4  } from "uuid";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
+import { sendResponse, validateInput } from "../functions";
 
 const ses = new AWS.SES({ region: 'us-east-1' })
+const cognito = new AWS.CognitoIdentityServiceProvider()
 
 const userHandler = {
 
@@ -271,6 +273,157 @@ const userHandler = {
 
     },
 
+    registerUserCognito: async (event) => {
+      try {
+        const isValid = validateInput(event.body)
+        if (!isValid)
+            return sendResponse(400, { message: 'Invalid input' })
+
+        const { email, password } = JSON.parse(event.body)
+        const { user_pool_id,client_id } = process.env
+
+        var params = {
+          ClientId: client_id, /* required */
+          Password: password, /* required */
+          Username: email, /* required */
+          UserAttributes: [
+            {
+              Name: 'email',
+              Value: email,
+            },
+            /* more items */
+          ],
+
+          ValidationData: [
+            {
+              Name: email, /* required */
+              Value: 'false',
+            },
+            /* more items */
+          ],
+        
+
+        };
+
+        const result = await cognito.signUp(params).promise();
+        console.log("Validation Data: ",result)
+
+        return sendResponse(200, { message: `Check Your email. We've sent required details to ${email}` });
+      }
+      catch (error) {
+          const message = error.message ? error.message : 'Internal server error'
+          return sendResponse(500, { message })
+      }
+    },
+
+    confirmRegisterUserCognito: async (event) => {
+
+      try {
+        const { email,verificationCode } = JSON.parse(event.body)
+        const { user_pool_id, client_id } = process.env
+
+        var params = {
+          ClientId: client_id, /* required */
+          ConfirmationCode: verificationCode, /* required */
+          Username: email, /* required */
+        };
+
+        const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+
+        await cognitoidentityserviceprovider.confirmSignUp(params).promise();
+
+        return sendResponse(200, { message: `Your account has been successfully Created` });
+
+
+      } catch (error) {
+          const message = error.message ? error.message : 'Internal server error'
+          return sendResponse(500, { message })
+      }
+
+    },
+
+    signInUserCognito: async (event) => {
+      try {
+        const isValid = validateInput(event.body)
+        if (!isValid)
+            return sendResponse(400, { message: 'Invalid input' })
+
+        const { email, password } = JSON.parse(event.body)
+        const { user_pool_id, client_id } = process.env
+        const params = {
+            AuthFlow: "ADMIN_NO_SRP_AUTH",
+            UserPoolId: user_pool_id,
+            ClientId: client_id,
+            AuthParameters: {
+                USERNAME: email,
+                PASSWORD: password
+            }
+        }
+        const response = await cognito.adminInitiateAuth(params).promise();
+        return sendResponse(200, { message: 'Success', token: response.AuthenticationResult.IdToken })
+      }
+      catch (error) {
+          const message = error.message ? error.message : 'Internal server error'
+          return sendResponse(500, { message })
+      }
+    },
+
+    forgotPasswordCognito: async (event) => {
+      try {
+        const { email } = JSON.parse(event.body)
+        const { user_pool_id, client_id } = process.env
+
+        const params = {
+            ClientId: client_id,
+            Username: email
+        }
+        const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+
+        await cognitoidentityserviceprovider.forgotPassword(params).promise();
+        // console.log("response iz: ",response)
+
+        // return response.CodeDeliveryDetails;
+
+        // return {
+        //     statusCode: 200,
+        //     body: response,
+        //   };
+
+        return sendResponse(200, { message: `Check Your email. We've sent required details to ${email}` });
+
+      } catch (error) {
+          const message = error.message ? error.message : 'Internal server error'
+          return sendResponse(500, { message })
+      }
+    },
+
+    resetPasswordCognito: async (event) => {
+      try {
+
+        const { email,verificationCode,newPassword } = JSON.parse(event.body)
+        const { user_pool_id, client_id } = process.env
+
+        var params = {
+            ClientId: client_id, /* required */
+            ConfirmationCode: verificationCode, /* required */
+            Password: newPassword, /* required */
+            Username: email, /* required */
+            
+        };
+
+        const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+
+        await cognitoidentityserviceprovider.confirmForgotPassword(params).promise();
+
+        return sendResponse(200, { message: `Your password has been successfully Reset` });
+
+        
+
+      } catch (error) {
+          const message = error.message ? error.message : 'Internal server error'
+          return sendResponse(500, { message })
+      }
+    },
 
 }
 
